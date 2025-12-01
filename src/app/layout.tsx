@@ -1,6 +1,5 @@
-// src/app/layout.tsx
 import type { Metadata } from "next";
-import "./"; // 전역 스타일
+import "@/globals.css";
 
 export const metadata: Metadata = {
   title: "Next.js Arch Example",
