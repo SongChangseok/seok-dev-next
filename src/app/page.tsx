@@ -1,152 +1,267 @@
 "use client";
 
 import { useState } from "react";
-import { MessageSquare, ChevronRight, Sparkles } from "lucide-react";
+import {
+  Box,
+  Container,
+  Typography,
+  Card,
+  CardActionArea,
+  Chip,
+  AppBar,
+  Toolbar,
+  useTheme,
+  Grid,
+} from "@mui/material";
+
+// MUI Icons
+import ChatIcon from "@mui/icons-material/Chat";
+import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 export default function MainPage() {
-  const [hoveredTool, setHoveredTool] = useState(null);
+  const [hoveredTool, setHoveredTool] = useState<string | null>(null);
+  const theme = useTheme();
 
   const tools = [
     {
       id: "chatbot",
       name: "AI 챗봇",
       description: "똑똑한 AI 어시스턴트와 대화하세요",
-      icon: MessageSquare,
-      color: "from-blue-500 to-cyan-500",
+      icon: ChatIcon,
+      color: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
       available: true,
     },
     {
       id: "coming-soon-1",
       name: "준비중",
       description: "곧 만나요",
-      icon: Sparkles,
-      color: "from-gray-400 to-gray-500",
+      icon: AutoAwesomeIcon,
+      color: "linear-gradient(135deg, #9ca3af 0%, #6b7280 100%)",
       available: false,
     },
     {
       id: "coming-soon-2",
       name: "준비중",
       description: "곧 만나요",
-      icon: Sparkles,
-      color: "from-gray-400 to-gray-500",
+      icon: AutoAwesomeIcon,
+      color: "linear-gradient(135deg, #9ca3af 0%, #6b7280 100%)",
       available: false,
     },
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-cyan-50">
+    <Box
+      sx={{
+        minHeight: "100vh",
+        background:
+          "linear-gradient(to bottom right, #f8fafc, #eff6ff, #ecfeff)",
+      }}
+    >
       {/* Header */}
-      <header className="border-b border-white/50 bg-white/70 backdrop-blur-lg sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-cyan-600 flex items-center justify-center">
-              <Sparkles className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+      <AppBar
+        position="sticky"
+        color="transparent"
+        elevation={0}
+        sx={{
+          backdropFilter: "blur(12px)",
+          backgroundColor: "rgba(255, 255, 255, 0.7)",
+          borderBottom: "1px solid rgba(255, 255, 255, 0.5)",
+        }}
+      >
+        <Container maxWidth="lg">
+          <Toolbar disableGutters sx={{ py: 1 }}>
+            <Box
+              sx={{
+                width: 40,
+                height: 40,
+                borderRadius: 3,
+                background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                mr: 2,
+              }}
+            >
+              <AutoAwesomeIcon sx={{ color: "white" }} />
+            </Box>
+            <Box>
+              <Typography
+                variant="h6"
+                component="h1"
+                sx={{
+                  fontWeight: 700,
+                  background: `linear-gradient(to right, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
                 Seok Dev Tools
-              </h1>
-              <p className="text-sm text-slate-500">유용한 도구 모음</p>
-            </div>
-          </div>
-        </div>
-      </header>
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
+                유용한 도구 모음
+              </Typography>
+            </Box>
+          </Toolbar>
+        </Container>
+      </AppBar>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-6 py-12">
+      <Container maxWidth="lg" sx={{ py: 6 }}>
         {/* Welcome Section */}
-        <div className="mb-12">
-          <h2 className="text-4xl font-bold text-slate-800 mb-3">
+        <Box mb={6}>
+          <Typography
+            variant="h4"
+            component="h2"
+            fontWeight="bold"
+            gutterBottom
+          >
             안녕하세요 👋
-          </h2>
-          <p className="text-lg text-slate-600">필요한 도구를 선택해주세요</p>
-        </div>
+          </Typography>
+          <Typography variant="body1" color="text.secondary">
+            필요한 도구를 선택해주세요
+          </Typography>
+        </Box>
 
-        {/* Tools Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <Grid container spacing={3}>
           {tools.map((tool) => {
             const Icon = tool.icon;
+            const isHovered = hoveredTool === tool.id;
+
             return (
-              <button
-                key={tool.id}
-                disabled={!tool.available}
-                onMouseEnter={() => setHoveredTool(tool.id)}
-                onMouseLeave={() => setHoveredTool(null)}
-                className={`
-                  group relative p-8 rounded-2xl border-2 transition-all duration-300
-                  ${
-                    tool.available
-                      ? "bg-white border-slate-200 hover:border-blue-300 hover:shadow-2xl hover:shadow-blue-100 hover:-translate-y-1 cursor-pointer"
-                      : "bg-gray-50 border-gray-200 opacity-60 cursor-not-allowed"
-                  }
-                `}
-              >
-                {/* Background Gradient */}
-                <div
-                  className={`
-                  absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-10 transition-opacity duration-300
-                  bg-gradient-to-br ${tool.color}
-                `}
-                />
-
-                {/* Icon */}
-                <div
-                  className={`
-                  w-16 h-16 rounded-xl mb-5 flex items-center justify-center
-                  bg-gradient-to-br ${tool.color}
-                  ${tool.available ? "group-hover:scale-110" : ""}
-                  transition-transform duration-300
-                `}
+              <Grid size={{ xs: 12, md: 6, lg: 4 }} key={tool.id}>
+                <Card
+                  elevation={isHovered && tool.available ? 8 : 1}
+                  sx={{
+                    height: "100%",
+                    borderRadius: 4,
+                    transition: "all 0.3s ease",
+                    transform:
+                      isHovered && tool.available ? "translateY(-4px)" : "none",
+                    opacity: tool.available ? 1 : 0.6,
+                    border:
+                      isHovered && tool.available
+                        ? `1px solid ${theme.palette.primary.main}`
+                        : "1px solid transparent",
+                  }}
+                  onMouseEnter={() => setHoveredTool(tool.id)}
+                  onMouseLeave={() => setHoveredTool(null)}
                 >
-                  <Icon className="w-8 h-8 text-white" />
-                </div>
+                  <CardActionArea
+                    disabled={!tool.available}
+                    sx={{
+                      p: 3,
+                      height: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "flex-start",
+                      justifyContent: "flex-start",
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        width: 64,
+                        height: 64,
+                        borderRadius: 3,
+                        mb: 3,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        background: tool.color,
+                        transform:
+                          isHovered && tool.available
+                            ? "scale(1.1)"
+                            : "scale(1)",
+                        transition: "transform 0.3s",
+                      }}
+                    >
+                      <Icon sx={{ color: "white", fontSize: 32 }} />
+                    </Box>
 
-                {/* Content */}
-                <div className="text-left">
-                  <h3 className="text-xl font-bold text-slate-800 mb-2 flex items-center gap-2">
-                    {tool.name}
+                    <Box sx={{ width: "100%" }}>
+                      <Box
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="space-between"
+                        mb={1}
+                      >
+                        <Typography variant="h6" fontWeight="bold">
+                          {tool.name}
+                        </Typography>
+                        {tool.available && (
+                          <ChevronRightIcon
+                            sx={{
+                              color: "text.secondary",
+                              transform: isHovered ? "translateX(4px)" : "none",
+                              transition: "transform 0.3s",
+                            }}
+                          />
+                        )}
+                      </Box>
+                      <Typography variant="body2" color="text.secondary">
+                        {tool.description}
+                      </Typography>
+                    </Box>
+
                     {tool.available && (
-                      <ChevronRight
-                        className={`
-                        w-5 h-5 text-slate-400 transition-transform duration-300
-                        ${hoveredTool === tool.id ? "translate-x-1" : ""}
-                      `}
-                      />
+                      <Box position="absolute" top={16} right={16}>
+                        <Chip
+                          label="사용 가능"
+                          size="small"
+                          color="success"
+                          sx={{
+                            bgcolor: "#dcfce7",
+                            color: "#15803d",
+                            fontWeight: 600,
+                          }}
+                        />
+                      </Box>
                     )}
-                  </h3>
-                  <p className="text-slate-600">{tool.description}</p>
-                </div>
-
-                {/* Available Badge */}
-                {tool.available && (
-                  <div className="absolute top-4 right-4">
-                    <div className="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">
-                      사용 가능
-                    </div>
-                  </div>
-                )}
-              </button>
+                  </CardActionArea>
+                </Card>
+              </Grid>
             );
           })}
-        </div>
+        </Grid>
 
         {/* Footer Info */}
-        <div className="mt-16 p-6 rounded-xl bg-white/70 backdrop-blur-sm border border-slate-200">
-          <div className="flex items-start gap-4">
-            <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
-              <Sparkles className="w-5 h-5 text-blue-600" />
-            </div>
-            <div>
-              <h4 className="font-semibold text-slate-800 mb-1">
-                더 많은 기능이 추가될 예정입니다
-              </h4>
-              <p className="text-sm text-slate-600">
-                지속적으로 새로운 도구들이 업데이트됩니다. 기대해주세요!
-              </p>
-            </div>
-          </div>
-        </div>
-      </main>
-    </div>
+        <Box
+          mt={8}
+          p={3}
+          sx={{
+            borderRadius: 3,
+            backgroundColor: "rgba(255, 255, 255, 0.7)",
+            backdropFilter: "blur(4px)",
+            border: "1px solid",
+            borderColor: "divider",
+            display: "flex",
+            gap: 2,
+            alignItems: "flex-start",
+          }}
+        >
+          <Box
+            sx={{
+              width: 40,
+              height: 40,
+              borderRadius: 2,
+              bgcolor: "primary.light",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <AutoAwesomeIcon color="primary" />
+          </Box>
+          <Box>
+            <Typography variant="subtitle1" fontWeight={600}>
+              더 많은 기능이 추가될 예정입니다
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              지속적으로 새로운 도구들이 업데이트됩니다. 기대해주세요!
+            </Typography>
+          </Box>
+        </Box>
+      </Container>
+    </Box>
   );
 }

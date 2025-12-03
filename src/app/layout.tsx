@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import "@/globals.css";
+import ThemeRegistry from "@/components/ThemeRegistry/ThemeRegistry";
 
 export const metadata: Metadata = {
   title: "Next.js Arch Example",
@@ -13,7 +13,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko">
-      <body className="bg-gray-100 text-gray-900">{children}</body>
+      <body>
+        <ThemeRegistry>{children}</ThemeRegistry>
+      </body>
     </html>
   );
 }

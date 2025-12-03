@@ -2,16 +2,34 @@
 
 import { useState } from "react";
 import {
-  Send,
-  Bot,
-  User,
-  Sparkles,
-  Home,
-  Settings,
-  Trash2,
-} from "lucide-react";
+  Box,
+  Drawer,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+  Button,
+  TextField,
+  IconButton,
+  Avatar,
+  Paper,
+  Stack,
+  useTheme,
+} from "@mui/material";
+// MUI Icons
+import SendIcon from "@mui/icons-material/Send";
+import SmartToyIcon from "@mui/icons-material/SmartToy"; // Bot
+import PersonIcon from "@mui/icons-material/Person";
+import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome"; // Sparkles
+import HomeIcon from "@mui/icons-material/Home";
+import SettingsIcon from "@mui/icons-material/Settings";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+
+const DRAWER_WIDTH = 320;
 
 export default function ChatbotUI() {
+  const theme = useTheme();
   const [messages, setMessages] = useState([
     {
       id: 1,
@@ -26,7 +44,6 @@ export default function ChatbotUI() {
   const handleSend = () => {
     if (!inputValue.trim()) return;
 
-    // Add user message
     const userMessage = {
       id: messages.length + 1,
       role: "user",
@@ -38,7 +55,6 @@ export default function ChatbotUI() {
     setInputValue("");
     setIsTyping(true);
 
-    // Simulate AI response
     setTimeout(() => {
       const aiMessage = {
         id: messages.length + 2,
@@ -53,210 +69,291 @@ export default function ChatbotUI() {
   };
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-cyan-50">
+    <Box sx={{ display: "flex", height: "100vh", bgcolor: "#f8fafc" }}>
       {/* Sidebar */}
-      <div className="w-80 bg-white border-r border-slate-200 flex flex-col">
-        {/* Sidebar Header */}
-        <div className="p-6 border-b border-slate-200">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-cyan-600 flex items-center justify-center">
-              <Sparkles className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h2 className="font-bold text-slate-800">AI 챗봇</h2>
-              <p className="text-xs text-slate-500">항상 도와드립니다</p>
-            </div>
-          </div>
+      <Drawer
+        variant="permanent"
+        sx={{
+          width: DRAWER_WIDTH,
+          flexShrink: 0,
+          "& .MuiDrawer-paper": {
+            width: DRAWER_WIDTH,
+            boxSizing: "border-box",
+            borderRight: "1px solid #e2e8f0",
+          },
+        }}
+      >
+        <Box sx={{ p: 3, borderBottom: "1px solid #e2e8f0" }}>
+          <Stack direction="row" spacing={2} alignItems="center" mb={2}>
+            <Avatar
+              variant="rounded"
+              sx={{
+                bgcolor: "transparent",
+                background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+              }}
+            >
+              <AutoAwesomeIcon />
+            </Avatar>
+            <Box>
+              <Typography variant="subtitle1" fontWeight="bold">
+                AI 챗봇
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
+                항상 도와드립니다
+              </Typography>
+            </Box>
+          </Stack>
 
-          <button className="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-blue-200 transition-all duration-300 flex items-center justify-center gap-2">
-            <Sparkles className="w-4 h-4" />새 대화 시작
-          </button>
-        </div>
+          <Button
+            fullWidth
+            variant="contained"
+            startIcon={<AutoAwesomeIcon />}
+            sx={{
+              background: `linear-gradient(to right, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+              py: 1.5,
+            }}
+          >
+            새 대화 시작
+          </Button>
+        </Box>
 
-        {/* Conversation List */}
-        <div className="flex-1 overflow-y-auto p-4">
-          <div className="text-xs font-semibold text-slate-400 mb-3 px-2">
+        <Box sx={{ flex: 1, overflowY: "auto", p: 2 }}>
+          <Typography
+            variant="caption"
+            fontWeight="bold"
+            color="text.secondary"
+            sx={{ px: 2, mb: 1, display: "block" }}
+          >
             최근 대화
-          </div>
-
-          <div className="space-y-2">
+          </Typography>
+          <List>
             {[1, 2, 3].map((i) => (
-              <button
+              <ListItemButton
                 key={i}
-                className="w-full p-3 rounded-lg hover:bg-slate-50 transition-colors text-left group"
+                sx={{
+                  borderRadius: 2,
+                  mb: 1,
+                  "&:hover": { bgcolor: "#f1f5f9" },
+                }}
               >
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-100 to-cyan-100 flex items-center justify-center flex-shrink-0">
-                    <Bot className="w-4 h-4 text-blue-600" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-slate-800 truncate">
-                      대화 #{i}
-                    </p>
-                    <p className="text-xs text-slate-500 truncate">
-                      {i === 1 ? "방금 전" : `${i}시간 전`}
-                    </p>
-                  </div>
-                </div>
-              </button>
+                <ListItemIcon sx={{ minWidth: 40 }}>
+                  <Box
+                    sx={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: 1,
+                      bgcolor: "primary.light",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <SmartToyIcon fontSize="small" color="primary" />
+                  </Box>
+                </ListItemIcon>
+                <ListItemText
+                  primary={`대화 #${i}`}
+                  secondary={i === 1 ? "방금 전" : `${i}시간 전`}
+                  primaryTypographyProps={{ variant: "body2", fontWeight: 500 }}
+                  secondaryTypographyProps={{ variant: "caption" }}
+                />
+              </ListItemButton>
             ))}
-          </div>
-        </div>
+          </List>
+        </Box>
 
-        {/* Sidebar Footer */}
-        <div className="p-4 border-t border-slate-200">
-          <button className="w-full p-3 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-3 text-slate-600">
-            <Home className="w-5 h-5" />
-            <span className="font-medium">메인으로 돌아가기</span>
-          </button>
-        </div>
-      </div>
+        <Box sx={{ p: 2, borderTop: "1px solid #e2e8f0" }}>
+          <Button
+            fullWidth
+            startIcon={<HomeIcon />}
+            color="inherit"
+            sx={{ justifyContent: "flex-start" }}
+          >
+            메인으로 돌아가기
+          </Button>
+        </Box>
+      </Drawer>
 
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col">
+      <Box
+        component="main"
+        sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}
+      >
         {/* Chat Header */}
-        <div className="bg-white border-b border-slate-200 px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-cyan-600 flex items-center justify-center">
-                <Bot className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h3 className="font-bold text-slate-800">AI 어시스턴트</h3>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                  <span className="text-xs text-slate-500">온라인</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <button className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
-                <Trash2 className="w-5 h-5 text-slate-600" />
-              </button>
-              <button className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
-                <Settings className="w-5 h-5 text-slate-600" />
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Messages Area */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-6">
-          {messages.map((message) => (
-            <div
-              key={message.id}
-              className={`flex gap-4 ${
-                message.role === "user" ? "flex-row-reverse" : ""
-              }`}
+        <Box
+          sx={{
+            px: 3,
+            py: 2,
+            bgcolor: "white",
+            borderBottom: "1px solid #e2e8f0",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Stack direction="row" spacing={2} alignItems="center">
+            <Avatar
+              variant="rounded"
+              sx={{
+                background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+              }}
             >
-              {/* Avatar */}
-              <div
-                className={`
-                w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0
-                ${
-                  message.role === "user"
-                    ? "bg-gradient-to-br from-slate-600 to-slate-700"
-                    : "bg-gradient-to-br from-blue-600 to-cyan-600"
-                }
-              `}
-              >
-                {message.role === "user" ? (
-                  <User className="w-5 h-5 text-white" />
-                ) : (
-                  <Bot className="w-5 h-5 text-white" />
-                )}
-              </div>
+              <SmartToyIcon />
+            </Avatar>
+            <Box>
+              <Typography variant="subtitle1" fontWeight="bold">
+                AI 어시스턴트
+              </Typography>
+              <Stack direction="row" spacing={1} alignItems="center">
+                <Box
+                  sx={{
+                    width: 8,
+                    height: 8,
+                    borderRadius: "50%",
+                    bgcolor: "#22c55e",
+                  }}
+                />
+                <Typography variant="caption" color="text.secondary">
+                  온라인
+                </Typography>
+              </Stack>
+            </Box>
+          </Stack>
 
-              {/* Message Bubble */}
-              <div
-                className={`
-                max-w-2xl px-5 py-4 rounded-2xl
-                ${
-                  message.role === "user"
-                    ? "bg-gradient-to-br from-blue-600 to-cyan-600 text-white"
-                    : "bg-white border border-slate-200"
-                }
-              `}
-              >
-                <p
-                  className={`text-sm leading-relaxed ${
-                    message.role === "user" ? "text-white" : "text-slate-800"
-                  }`}
-                >
-                  {message.content}
-                </p>
-                <p
-                  className={`text-xs mt-2 ${
-                    message.role === "user" ? "text-blue-100" : "text-slate-400"
-                  }`}
-                >
-                  {message.timestamp.toLocaleTimeString("ko-KR", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </p>
-              </div>
-            </div>
-          ))}
+          <Stack direction="row" spacing={1}>
+            <IconButton>
+              <DeleteOutlineIcon />
+            </IconButton>
+            <IconButton>
+              <SettingsIcon />
+            </IconButton>
+          </Stack>
+        </Box>
 
-          {/* Typing Indicator */}
+        {/* Messages */}
+        <Box
+          sx={{
+            flexGrow: 1,
+            p: 4,
+            overflowY: "auto",
+            display: "flex",
+            flexDirection: "column",
+            gap: 3,
+          }}
+        >
+          {messages.map((message) => {
+            const isUser = message.role === "user";
+            return (
+              <Box
+                key={message.id}
+                sx={{
+                  display: "flex",
+                  flexDirection: isUser ? "row-reverse" : "row",
+                  gap: 2,
+                }}
+              >
+                <Avatar
+                  sx={{
+                    bgcolor: isUser ? "grey.700" : "transparent",
+                    background: !isUser
+                      ? `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`
+                      : undefined,
+                  }}
+                >
+                  {isUser ? <PersonIcon /> : <SmartToyIcon />}
+                </Avatar>
+
+                <Paper
+                  elevation={0}
+                  sx={{
+                    p: 2,
+                    maxWidth: "60%",
+                    bgcolor: isUser ? "primary.main" : "white",
+                    color: isUser ? "white" : "text.primary",
+                    border: isUser ? "none" : "1px solid #e2e8f0",
+                    background: isUser
+                      ? `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`
+                      : undefined,
+                  }}
+                >
+                  <Typography variant="body2" sx={{ lineHeight: 1.6 }}>
+                    {message.content}
+                  </Typography>
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      display: "block",
+                      mt: 1,
+                      color: isUser
+                        ? "rgba(255,255,255,0.7)"
+                        : "text.secondary",
+                      textAlign: "right",
+                    }}
+                  >
+                    {message.timestamp.toLocaleTimeString("ko-KR", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </Typography>
+                </Paper>
+              </Box>
+            );
+          })}
           {isTyping && (
-            <div className="flex gap-4">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-cyan-600 flex items-center justify-center flex-shrink-0">
-                <Bot className="w-5 h-5 text-white" />
-              </div>
-              <div className="bg-white border border-slate-200 px-5 py-4 rounded-2xl">
-                <div className="flex gap-1">
-                  <div
-                    className="w-2 h-2 bg-slate-400 rounded-full animate-bounce"
-                    style={{ animationDelay: "0ms" }}
-                  ></div>
-                  <div
-                    className="w-2 h-2 bg-slate-400 rounded-full animate-bounce"
-                    style={{ animationDelay: "150ms" }}
-                  ></div>
-                  <div
-                    className="w-2 h-2 bg-slate-400 rounded-full animate-bounce"
-                    style={{ animationDelay: "300ms" }}
-                  ></div>
-                </div>
-              </div>
-            </div>
+            <Box sx={{ display: "flex", gap: 2 }}>
+              <Avatar
+                sx={{
+                  background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                }}
+              >
+                <SmartToyIcon />
+              </Avatar>
+              <Paper sx={{ p: 2, border: "1px solid #e2e8f0" }} elevation={0}>
+                <Typography variant="body2" color="text.secondary">
+                  AI가 입력 중...
+                </Typography>
+              </Paper>
+            </Box>
           )}
-        </div>
+        </Box>
 
         {/* Input Area */}
-        <div className="bg-white border-t border-slate-200 p-6">
-          <div className="max-w-4xl mx-auto">
-            <div className="flex gap-3">
-              <div className="flex-1 relative">
-                <input
-                  type="text"
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                  onKeyPress={(e) => e.key === "Enter" && handleSend()}
-                  placeholder="메시지를 입력하세요..."
-                  className="w-full px-5 py-4 rounded-xl border-2 border-slate-200 focus:border-blue-500 focus:outline-none transition-colors"
-                />
-              </div>
-              <button
+        <Box sx={{ p: 3, bgcolor: "white", borderTop: "1px solid #e2e8f0" }}>
+          <Stack maxWidth="md" mx="auto" spacing={1}>
+            <Stack direction="row" spacing={2}>
+              <TextField
+                fullWidth
+                placeholder="메시지를 입력하세요..."
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleSend()}
+                variant="outlined"
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: 3,
+                  },
+                }}
+              />
+              <Button
+                variant="contained"
                 onClick={handleSend}
                 disabled={!inputValue.trim()}
-                className="px-6 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-blue-200 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                endIcon={<SendIcon />}
+                sx={{
+                  px: 3,
+                  background: `linear-gradient(to right, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                }}
               >
-                <Send className="w-5 h-5" />
                 전송
-              </button>
-            </div>
-
-            <p className="text-xs text-slate-400 mt-3 text-center">
+              </Button>
+            </Stack>
+            <Typography variant="caption" color="text.disabled" align="center">
               AI가 생성한 답변은 부정확할 수 있습니다. 중요한 정보는
               확인해주세요.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
+            </Typography>
+          </Stack>
+        </Box>
+      </Box>
+    </Box>
   );
 }
